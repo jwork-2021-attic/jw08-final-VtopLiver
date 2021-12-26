@@ -34,7 +34,7 @@ public class CreatureFactory {
     }
     
     public Player newPlayer(List<String> messages) {
-        Player player = new Player(this.world, (char)2, AsciiPanel.brightWhite, 100, 20, 5, 9);
+        Player player = new Player(this.world, (char)0, AsciiPanel.brightWhite, 100, 20, 5, 9);
         p=player;
         world.addAtEmptyLocation(player);
         new PlayerAI(player, messages);
@@ -42,7 +42,7 @@ public class CreatureFactory {
     }
 
     public Fungus newFungus() {
-        Fungus fungus = new Fungus(this.world, (char)3, AsciiPanel.brightYellow, 10, 0, 0, 4, p);
+        Fungus fungus = new Fungus(this.world, (char)4, AsciiPanel.brightYellow, 10, 0, 0, 4, p);
         world.addAtEmptyLocation(fungus);
         new FungusAI(fungus, this);
         new Thread(fungus).start();
@@ -50,7 +50,7 @@ public class CreatureFactory {
     }
 
     public Fungus newBoss() {
-        Fungus fungus = new Fungus(this.world, (char)1, AsciiPanel.brightGreen, 200, 20, 20, 7, p);
+        Fungus fungus = new Fungus(this.world, (char)5, AsciiPanel.brightGreen, 200, 20, 20, 7, p);
         world.addAtEmptyLocation(fungus);
         new FungusAI(fungus, this);
         new Thread(fungus).start();

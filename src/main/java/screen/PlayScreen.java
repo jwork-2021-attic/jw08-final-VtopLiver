@@ -51,10 +51,12 @@ public class PlayScreen implements Screen {
     private Player p0;
     private Player p1;
     private Player p2;
+    private boolean multi;
 
     public PlayScreen(boolean isLoad){
-        this.screenWidth = 80;
-        this.screenHeight = 24;
+        this.screenWidth = 30;
+        this.screenHeight = 30;
+        multi=false;
         if (isLoad){
             loadWorld();
             try {
@@ -83,22 +85,32 @@ public class PlayScreen implements Screen {
 
     public PlayScreen(int playID){
         this.playerID=playID;
-        this.screenWidth = 80;
-        this.screenHeight = 24;
+        this.screenWidth = 30;
+        this.screenHeight = 30;
+        multi=true;
         loadWorld();
         //Player[] ptmp={p0,p1,p2};
         //for (int i=0;i<3;i++){
-        p0 = new Player(this.world, (char)2, AsciiPanel.brightWhite, 100, 20, 5, 90);
+        p0 = new Player(this.world, (char)0, AsciiPanel.brightWhite, 100, 20, 5, 90);
         new PlayerAI(p0, messages);
-        world.addAtEmptyLocation(p0);
+        p0.setX(3);
+        p0.setY(3);
+        world.getCreatures().add(p0);
+        //world.addAtEmptyLocation(p0);
         new Thread(p0).start();
-        p1 = new Player(this.world, (char)3, AsciiPanel.brightWhite, 100, 20, 5, 90);
+        p1 = new Player(this.world, (char)1, AsciiPanel.brightWhite, 100, 20, 5, 90);
         new PlayerAI(p1, messages);
-        world.addAtEmptyLocation(p1);
+        p1.setX(3);
+        p1.setY(27);
+        world.getCreatures().add(p1);
+        //world.addAtEmptyLocation(p1);
         new Thread(p1).start();
-        p2 = new Player(this.world, (char)4, AsciiPanel.brightWhite, 100, 20, 5, 90);
+        p2 = new Player(this.world, (char)2, AsciiPanel.brightWhite, 100, 20, 5, 90);
         new PlayerAI(p2, messages);
-        world.addAtEmptyLocation(p2);
+        p2.setX(27);
+        p2.setY(3);
+        world.getCreatures().add(p2);
+        //world.addAtEmptyLocation(p2);
         new Thread(p2).start();
         if (playID==0)
             this.player=p0;
@@ -130,9 +142,9 @@ public class PlayScreen implements Screen {
     }
 
     private void createWorld() {
-        world = new WorldBuilder(90, 31).makeCaves().build();
+        world = new WorldBuilder(30, 30).makeCaves().build();
     }
-    private void loadWorld() {world = new WorldBuilder(90,31).load();}
+    private void loadWorld() {world = new WorldBuilder(30,30).load();}
     private void displayTiles(AsciiPanel terminal, int left, int top) {
         // Show terrain
         for (int x = 0; x < screenWidth; x++) {
@@ -190,12 +202,13 @@ public class PlayScreen implements Screen {
     @Override
     public void displayOutput(AsciiPanel terminal) {
         // Terrain and creatures
-        displayTiles(terminal, getScrollX(), getScrollY());
+        displayTiles(terminal, 0, 0);
+        //displayTiles(terminal, getScrollX(), getScrollY());
         // Player
         terminal.write(player.glyph(), player.x() - getScrollX(), player.y() - getScrollY(), player.color());
         // Stats
         String stats = String.format("%3d/%3d hp", player.hp(), player.maxHP());
-        terminal.write(stats, 1, 23);
+        terminal.write(stats, 1, 31);
         // Messages
         displayMessages(terminal, this.messages);
         displaywaterSki(terminal);
@@ -242,11 +255,27 @@ public class PlayScreen implements Screen {
         if(player.hp()<1){
             return new LoseScreen();
         }
-        try{
-            client.handleWrite(pack(key.getKeyCode(),lastCode));
-        }catch (IOException e){
+        if (!multi&&world.getCreatures().size()==1&&player.hp()>0){
+            return new WinScreen();
         }
-
+        if (multi) {
+            int cnt=0;
+            if (p0.hp()>0)
+                cnt++;
+            if (p1.hp()>0)
+                cnt++;
+            if (p2.hp()>0)
+                cnt++;
+            if (cnt==1&&player.hp()>0){
+                return new WinScreen();
+            }
+        }
+        if (multi){
+            try{
+                client.handleWrite(pack(key.getKeyCode(),lastCode));
+            }catch (IOException e){
+            }
+        }
         return this;
         
             

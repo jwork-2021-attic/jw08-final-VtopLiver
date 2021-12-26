@@ -50,7 +50,7 @@ public abstract class Bullet implements Runnable{
 
     }
     public Bullet(World world,Color color,int attack, int direction){
-        this(world,(char)7,color,attack,direction);
+        this(world,(char)8,color,attack,direction);
     }
     public Bullet(World world,int attack,int direction){
         this(world,Color.BLUE,attack,direction);

@@ -373,7 +373,8 @@ public class AsciiPanel extends JPanel {
                 Color fg = foregroundColors[x][y];
 
                 LookupOp op = setColors(bg, fg);
-                BufferedImage img = op.filter(glyphs[chars[x][y]], null);
+                BufferedImage img = glyphs[chars[x][y]];
+                //BufferedImage img = op.filter(glyphs[chars[x][y]], null);
                 offscreenGraphics.drawImage(img, x * charWidth, y * charHeight, null);
 
                 oldBackgroundColors[x][y] = backgroundColors[x][y];

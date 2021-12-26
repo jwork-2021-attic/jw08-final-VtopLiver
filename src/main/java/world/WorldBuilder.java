@@ -56,12 +56,20 @@ public class WorldBuilder {
         for (int width = 0; width < this.width; width++) {
             for (int height = 0; height < this.height; height++) {
                 Random rand = new Random();
-                if(rand.nextInt(World.TILE_TYPES)!=1) {
-                        tiles[width][height] = Tile.FLOOR;
+                int choice=rand.nextInt(World.TILE_TYPES+2);
+                if(choice==0) {
+                    tiles[width][height] = Tile.HpBonusWALL;
                 }
-                else{
+                else if (choice==1){
                     tiles[width][height] = Tile.WALL;
                 }
+                else if (choice==2){
+                    tiles[width][height] = Tile.AtkBonusWALL;
+                }
+                else {
+                    tiles[width][height] = Tile.FLOOR;
+                }
+
                 
             }
         }
@@ -87,14 +95,21 @@ public class WorldBuilder {
                             continue;
                         } else if (tiles[width + dwidth][height + dheight] == Tile.FLOOR) {
                             surrfloor++;
-                        } else if (tiles[width + dwidth][height + dheight] == Tile.WALL) {
+                        } else if (tiles[width + dwidth][height + dheight] != Tile.BOUNDS) {
                             surrwalls++;
                         }
                     }
                 }
                 Tile replacement;
                 if (surrwalls > surrfloor) {
-                    replacement = Tile.WALL;
+                    Random rand=new Random();
+                    int tmp=rand.nextInt(5);
+                    if (tmp==0)
+                        replacement=Tile.AtkBonusWALL;
+                    else if (tmp==1)
+                        replacement=Tile.HpBonusWALL;
+                    else
+                        replacement = Tile.WALL;
                 } else {
                     replacement = Tile.FLOOR;
                 }
@@ -112,7 +127,7 @@ public class WorldBuilder {
     }
 
     public WorldBuilder makeCaves() {
-        return randomizeTiles().smooth(6);
+        return randomizeTiles().smooth(8);
     }
 
     public void executeTile() throws IOException {
@@ -133,8 +148,12 @@ public class WorldBuilder {
                         tiles[i][j]=Tile.FLOOR;
                     else if (intc==1)
                         tiles[i][j]=Tile.WALL;
-                    else
+                    else if (intc==2)
                         tiles[i][j]=Tile.BOUNDS;
+                    else if (intc==3)
+                        tiles[i][j]=Tile.AtkBonusWALL;
+                    else
+                        tiles[i][j]=Tile.HpBonusWALL;
                 }
             }
             i++;

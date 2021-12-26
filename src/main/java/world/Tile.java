@@ -26,11 +26,15 @@ import java.awt.Color;
  */
 public enum Tile {
 
-    FLOOR((char) 250, AsciiPanel.green),
+    FLOOR((char) 3, Color.darkGray),
 
-    WALL((char) 177, AsciiPanel.brightBlack),
+    WALL((char) 178, AsciiPanel.brightBlack),
 
-    BOUNDS('x', AsciiPanel.magenta);
+    BOUNDS((char) 9, AsciiPanel.magenta),
+
+    AtkBonusWALL((char)178,AsciiPanel.brightBlack),
+
+    HpBonusWALL((char)178,AsciiPanel.brightBlack);
 
     private char glyph;
 
@@ -45,12 +49,12 @@ public enum Tile {
     }
 
     public boolean isDiggable() {
-        //return this != Tile.WALL;
-        return true;
+        return this != Tile.BOUNDS;
+        //return true;
     }//We can set the returnValue = true for test!
 
     public boolean isGround() {
-        return this != Tile.WALL && this != Tile.BOUNDS;
+        return this==Tile.FLOOR;
     }
 
     Tile(char glyph, Color color) {
@@ -63,7 +67,11 @@ public enum Tile {
             return 0;
         else if (this==Tile.WALL)
             return 1;
-        else
+        else if (this==Tile.BOUNDS)
             return 2;
+        else if (this==Tile.AtkBonusWALL)
+            return 3;
+        else
+            return 4;
     }
 }

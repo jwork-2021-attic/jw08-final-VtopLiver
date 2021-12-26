@@ -26,6 +26,9 @@ public class Fungus extends Creature{
     @Override
     public void run(){
         while(true){
+            if (hp()<=0){
+                break;
+            }
             if(!canSee(player.x(), player.y())){
                 int direction=rand.nextInt(4);
                 this.moveBy(dx[direction], dy[direction]);
@@ -66,6 +69,9 @@ public class Fungus extends Creature{
 
     @Override
     public int toInt(){
-        return 1;
+        if (maxHP()>50)
+            return 2;
+        else
+            return 1;
     }
 }

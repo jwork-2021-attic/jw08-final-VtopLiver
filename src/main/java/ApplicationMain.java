@@ -25,6 +25,7 @@ import asciiPanel.AsciiFont;
 import asciiPanel.AsciiPanel;
 import screen.MultiScreen;
 import screen.Screen;
+import screen.SelectScreen;
 import screen.StartScreen;
 
 /**
@@ -38,10 +39,10 @@ public class ApplicationMain extends JFrame implements KeyListener {
 
     public ApplicationMain() {
         super();
-        terminal = new AsciiPanel(80, 32, AsciiFont.TALRYTH_15_15);
+        terminal = new AsciiPanel(50, 32, AsciiFont.NEWSOURCE);
         add(terminal);
         pack();
-        screen = new MultiScreen();
+        screen = new SelectScreen();
         addKeyListener(this);
         repaint();
     }
@@ -84,7 +85,7 @@ public class ApplicationMain extends JFrame implements KeyListener {
             while (true) {
                 app.repaint();
                 try {
-                    Thread.sleep(33);
+                    Thread.sleep(50);
                 } catch (Exception e) {
                 }
             }

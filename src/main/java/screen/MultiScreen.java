@@ -20,19 +20,19 @@ public class MultiScreen implements Screen{
                 terminal.write((char) (26), 0, 2);
                 break;
             case 1:
-                terminal.write((char) (26), 0, 5);
+                terminal.write((char) (26), 0, 6);
                 break;
             case 2:
-                terminal.write((char) (26), 0, 8);
+                terminal.write((char) (26), 0, 10);
                 break;
             case 3:
-                terminal.write((char) (26), 0, 11);
+                terminal.write((char) (26), 0, 14);
                 break;
         }
         terminal.write("Server", 3, 2);
-        terminal.write("Client1", 3, 5);
-        terminal.write("Client2", 3, 8);
-        terminal.write("Client3", 3, 11);
+        terminal.write("Client1", 3, 6);
+        terminal.write("Client2", 3, 10);
+        terminal.write("Client3", 3, 14);
 
     }
 

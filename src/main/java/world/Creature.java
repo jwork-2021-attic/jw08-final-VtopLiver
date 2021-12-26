@@ -106,7 +106,7 @@ public abstract class Creature implements Runnable{
     }
 
     public boolean canSee(int wx, int wy) {
-        return ai.canSee(wx, wy);
+        return wx+wy<10000;
     }
 
     public Tile tile(int wx, int wy) {
@@ -117,21 +117,23 @@ public abstract class Creature implements Runnable{
         world.dig(wx, wy);
     }
 
-    public void moveBy(int mx, int my) {
+    public boolean moveBy(int mx, int my) {
         Creature other = world.creature(x + mx, y + my);
 
         if (other == null) {
             Bonus b =world.bonus(x+mx,y+my);
             if(b == null){
-                ai.onEnter(x + mx, y + my, world.tile(x + mx, y + my));
+                return ai.onEnter(x + mx, y + my, world.tile(x + mx, y + my));
             }
             else{
                 b.benefit(this);
                 world.removeBonus(b);
+                ai.onEnter(x + mx, y + my, world.tile(x + mx, y + my));
             }
         } else {
             attack(other);
         }
+        return false;
     }
 
     public void attack(Creature other) {

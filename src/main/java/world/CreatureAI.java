@@ -32,7 +32,8 @@ class CreatureAI {
         this.creature.setAI(this);
     }
 
-    public void onEnter(int x, int y, Tile tile) {
+    public boolean onEnter(int x, int y, Tile tile) {
+        return false;
     }
 
     public void onUpdate() {

@@ -43,7 +43,7 @@ public class World {
     private final double bonusRate=0.4;
     private Player player;
 
-    public static final int TILE_TYPES = 2;
+    public static final int TILE_TYPES = 4;
 
     public World(Tile[][] tiles) {
         this.tiles = tiles;
@@ -84,20 +84,17 @@ public class World {
 
     public void dig(int x, int y) {
         if (tile(x, y).isDiggable()) {
-            if(Math.random()<bonusRate){
-                Random rand=new Random();
-                if(rand.nextInt(2)==0){
-                    Bonus b=new AtkBonus(this,(char)65,Color.BLUE);
-                    b.setX(x);
-                    b.setY(y);
-                    bonuses.add(b);
-                }
-                else{
-                    Bonus b=new HpBonus(this,(char)66,Color.BLUE);
-                    b.setX(x);
-                    b.setY(y);
-                    bonuses.add(b);
-                }
+            if (tile(x,y)==Tile.HpBonusWALL){
+                Bonus b=new HpBonus(this,(char)7,Color.BLUE);
+                b.setX(x);
+                b.setY(y);
+                bonuses.add(b);
+            }
+            else if (tile(x,y)==Tile.AtkBonusWALL){
+                Bonus b=new AtkBonus(this,(char)6,Color.BLUE);
+                b.setX(x);
+                b.setY(y);
+                bonuses.add(b);
             }
             tiles[x][y] = Tile.FLOOR;
         }
@@ -171,12 +168,20 @@ public class World {
             int xx=Integer.parseInt(tmp[3]);
             int yy=Integer.parseInt(tmp[4]);
             if(idx==0){
-                player = new Player(this, (char)2, AsciiPanel.brightWhite, 100,hp, 20, 5, 9,xx,yy);
+                player = new Player(this, (char)0, AsciiPanel.brightWhite, 100,hp, 20, 5, 9,xx,yy);
                 this.creatures.add(player);
             }
             else if (idx==1){
                 if (player!=null) {
-                    Fungus fungus = new Fungus(this, (char)3, AsciiPanel.brightYellow, 10,hp, 0, 0, 4,xx,yy, player);
+                    Fungus fungus = new Fungus(this, (char)4, AsciiPanel.brightYellow, 10,hp, 0, 0, 4,xx,yy, player);
+                    this.creatures.add(fungus);
+                    new FungusAI(fungus,new CreatureFactory(this));
+                    new Thread(fungus).start();
+                }
+            }
+            else {
+                if (player!=null) {
+                    Fungus fungus = new Fungus(this, (char)5, AsciiPanel.brightYellow, 200,hp, 0, 0, 9,xx,yy, player);
                     this.creatures.add(fungus);
                     new FungusAI(fungus,new CreatureFactory(this));
                     new Thread(fungus).start();
@@ -199,12 +204,12 @@ public class World {
             int yy=Integer.parseInt(tmp[2]);
             Bonus b=null;
             if(idx==0){
-                b=new AtkBonus(this,(char)65,Color.BLUE);
+                b=new AtkBonus(this,(char)6,Color.BLUE);
                 b.setX(xx);
                 b.setY(yy);
             }
             else if (idx==1){
-                b=new HpBonus(this,(char)66,Color.BLUE);
+                b=new HpBonus(this,(char)7,Color.BLUE);
                 b.setX(xx);
                 b.setY(yy);
             }

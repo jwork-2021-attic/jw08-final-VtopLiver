@@ -39,11 +39,13 @@ public class FungusAI extends CreatureAI {
             spread();
         }
     }
-    public void onEnter(int x, int y, Tile tile) {
+    @Override
+    public boolean onEnter(int x, int y, Tile tile) {
         if (tile.isGround()) {
             creature.setX(x);
             creature.setY(y);
         }
+        return false;
     }
     private void spread() {
         int newx = creature.x() + (int) (Math.random() * 11) - 5;
