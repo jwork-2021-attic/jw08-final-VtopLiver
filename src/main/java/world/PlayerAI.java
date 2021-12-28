@@ -28,6 +28,11 @@ public class PlayerAI extends CreatureAI {
 
     private List<String> messages;
 
+    public PlayerAI(Creature creature) {
+        super(creature);
+        if (this.messages==null)
+            this.messages=new ArrayList<>();
+    }
     public PlayerAI(Creature creature, List<String> messages) {
         super(creature);
         this.messages = messages;

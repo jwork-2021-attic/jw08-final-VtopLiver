@@ -142,8 +142,8 @@ public abstract class Creature implements Runnable{
 
         other.modifyHP(-damage);
 
-        this.notify("You attack the '%s' for %d damage.", other.glyph, damage);
-        other.notify("The '%s' attacks you for %d damage.", glyph, damage);
+        //this.notify("You attack the '%s' for %d damage.", other.glyph, damage);
+        //other.notify("The '%s' attacks you for %d damage.", glyph, damage);
     }
     public void hurt(int atk){
         this.modifyHP(-atk);

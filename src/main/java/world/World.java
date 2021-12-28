@@ -241,7 +241,6 @@ public class World {
         }
         sc.close();
     }
-
     public Player getPlayer(){
         return player;
     }

@@ -1,19 +1,14 @@
-[![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-f059dc9a6f8d3a56e377f745f24479a46679e63a5d9fe6f495e02850cd0d8118.svg)](https://classroom.github.com/online_ide?assignment_repo_id=6524889&assignment_repo_type=AssignmentRepo)
-# jw08
+[![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-f059dc9a6f8d3a56e377f745f24479a46679e63a5d9fe6f495e02850cd0d8118.svg)](https://classroom.github.com/online_ide?assignment_repo_id=6244992&assignment_repo_type=AssignmentRepo)
+# jw05
 
-## 代码
+请将jw04的迷宫任务改造为一个ruguelike的葫芦娃与妖精两方对战游戏，游戏如下图所示。
 
-请综合jw04-jw07所有要求，完成一个完整的图形化网络对战游戏。所有提交的作业将统一展出，由各位同学相互打分。
+![](image-11.jpeg)
 
+需求如下：
 
-## 报告
-
-在此基础之上，请以《Developing a Java Game from Scratch》为题撰写文章一篇，内容涵盖但不限于：
-- 开发目标（我写的游戏是个什么样的游戏，灵感来源是什么）；
-- 设计理念（代码总体设计是什么？这样设计的好处是什么？）；
-- 技术问题（通信效率、并发控制、输入输出等问题我是怎么解决和优化的，面向对象设计方法带来了什么好处，等）；
-- 工程问题（如何采用各种设计方法、工程方法来提高开发效率和代码质量）；
-- 课程感言（对课程形式、内容等方面提出具体的意见和建议）
-- 等
-
-请使用《中国科学》的[latex模板](http://scis.scichina.com/download/ssi-template.zip)进行排版（不少于6页），输出pdf文件提交。
+- 每个生物体都是一个线程
+- 每个生物体的移动、攻击等行为决策可使用Minimax或其他算法（可参考https://www.baeldung.com/java-minimax-algorithm）
+- 请特别注意线程race condition（两个生物体不能占据同一个tile，对同一生物体的两个攻击行为应该先后发生作用，等）
+- 请发挥想象力
+- 完成后录屏发qq群或小破站

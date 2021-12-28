@@ -82,7 +82,7 @@ public class PlayScreen implements Screen {
         //System.out.println(this.world.getTiles().length);
         //System.out.println(this.world.getTiles()[0].length);
     }
-
+    public List<String> getMessages(){return this.messages;}
     public PlayScreen(int playID){
         this.playerID=playID;
         this.screenWidth = 30;
@@ -198,7 +198,7 @@ public class PlayScreen implements Screen {
         this.oldMessages.addAll(messages);
         messages.clear();
     }
-
+    public World getWorld(){return this.world;}
     @Override
     public void displayOutput(AsciiPanel terminal) {
         // Terrain and creatures
