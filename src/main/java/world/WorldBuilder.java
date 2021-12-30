@@ -44,9 +44,9 @@ public class WorldBuilder {
     public World build() {
         return new World(tiles);
     }
-    public World load(){
+    public World load(String path){
         try {
-            executeTile();
+            executeTile(path);
         } catch (IOException e){
             e.printStackTrace();
         }
@@ -127,13 +127,13 @@ public class WorldBuilder {
     }
 
     public WorldBuilder makeCaves() {
-        return randomizeTiles().smooth(8);
+        return randomizeTiles().smooth(6);
     }
 
-    public void executeTile() throws IOException {
+    public void executeTile(String path) throws IOException {
         if(!GameData.canLoad())
             return;
-        File f=new File("C:\\Users\\lenovo\\Desktop\\Java\\jw05-VtopLiver\\src\\main\\resources\\TileCache.txt");
+        File f=new File(path);
         Scanner sc=new Scanner(f);
         int i=0;
         while (sc.hasNextLine()){

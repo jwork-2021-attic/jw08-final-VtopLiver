@@ -11,10 +11,13 @@ public class ServerScreen implements Screen{
     public ServerScreen(){
         server=new Server();
     }
-
+    @Override
+    public Screen GameStatus(){
+        return this;
+    }
     @Override
     public void displayOutput(AsciiPanel terminal) {
-        terminal.write("Server Running...",1,1);
+        terminal.write("The Server is Running",5,14);
     }
 
     @Override

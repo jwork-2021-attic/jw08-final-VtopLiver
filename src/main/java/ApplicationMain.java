@@ -39,7 +39,7 @@ public class ApplicationMain extends JFrame implements KeyListener {
 
     public ApplicationMain() {
         super();
-        terminal = new AsciiPanel(50, 32, AsciiFont.NEWSOURCE);
+        terminal = new AsciiPanel(32, 32, AsciiFont.NEWSOURCE);
         add(terminal);
         pack();
         screen = new SelectScreen();
@@ -51,6 +51,7 @@ public class ApplicationMain extends JFrame implements KeyListener {
     public void repaint() {
         terminal.clear();
         screen.displayOutput(terminal);
+        screen=screen.GameStatus();
         super.repaint();
     }
 

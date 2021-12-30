@@ -11,7 +11,7 @@ public class SelectScreen implements Screen{
     private boolean positon;
     @Override
     public void displayOutput(AsciiPanel terminal){
-        terminal.write("Single Player", 15, 10);
+        terminal.write("Single Player", 5, 10);
         boolean cl=false;
         try{
             cl= GameData.canLoad();
@@ -19,17 +19,20 @@ public class SelectScreen implements Screen{
             e.printStackTrace();
         }
         if (cl){
-            terminal.write("Multi Players", 15, 20);
+            terminal.write("Multi Players", 5, 20);
         }
         if (this.positon && cl){
-            terminal.write("->", 12, 20);
+            terminal.write("->", 2, 20);
         }
         else{
-            terminal.write("->", 12, 10);
+            terminal.write("->", 2, 10);
         }
 
     }
-
+    @Override
+    public Screen GameStatus(){
+        return this;
+    }
     @Override
     public Screen respondToUserInput(KeyEvent key) {
         switch (key.getKeyCode()) {

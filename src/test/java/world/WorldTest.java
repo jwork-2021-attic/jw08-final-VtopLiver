@@ -70,4 +70,9 @@ public class WorldTest {
             }
         }
     }
+    @Test
+    public void testCollapse(){
+        world.collapse();
+        assertEquals(Tile.BOUNDS,world.tile(1,1));
+    }
 }

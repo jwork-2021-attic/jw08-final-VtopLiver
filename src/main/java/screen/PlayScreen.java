@@ -52,13 +52,15 @@ public class PlayScreen implements Screen {
     private Player p1;
     private Player p2;
     private boolean multi;
+    private static final int limit=20;
+    private static int lmtcnt=1;
 
     public PlayScreen(boolean isLoad){
         this.screenWidth = 30;
         this.screenHeight = 30;
         multi=false;
         if (isLoad){
-            loadWorld();
+            loadWorld("C:\\Users\\lenovo\\Desktop\\Java\\jw05-VtopLiver\\src\\main\\resources\\TileCache.txt");
             try {
                 world.executeCreature();
                 world.executeBonus();
@@ -73,6 +75,8 @@ public class PlayScreen implements Screen {
             createWorld();
             CreatureFactory creatureFactory = new CreatureFactory(this.world);
             createCreatures(creatureFactory);
+            Sword s=new Sword(world,(char)10,Color.BLUE);
+            world.addAtEmptyLocation(s);
         }
         data=new GameData(this.world);
 
@@ -83,12 +87,41 @@ public class PlayScreen implements Screen {
         //System.out.println(this.world.getTiles()[0].length);
     }
     public List<String> getMessages(){return this.messages;}
+    @Override
+    public Screen GameStatus(){
+        if(player.hp()<1){
+            return new LoseScreen();
+        }
+        if (!multi&&world.getCreatures().size()==1&&player.hp()>0){
+            return new WinScreen();
+        }
+        if (multi) {
+            int cnt=0;
+            if (p0.hp()>0)
+                cnt++;
+            else
+                this.world.remove(p0);
+            if (p1.hp()>0)
+                cnt++;
+            else
+                this.world.remove(p1);
+            if (p2.hp()>0)
+                cnt++;
+            else
+                this.world.remove(p2);
+            if (cnt==1&&player.hp()>0){
+                return new WinScreen();
+
+            }
+        }
+        return this;
+    }
     public PlayScreen(int playID){
         this.playerID=playID;
         this.screenWidth = 30;
         this.screenHeight = 30;
         multi=true;
-        loadWorld();
+        loadWorld("C:\\Users\\lenovo\\Desktop\\Java\\jw05-VtopLiver\\src\\main\\resources\\Map.txt");
         //Player[] ptmp={p0,p1,p2};
         //for (int i=0;i<3;i++){
         p0 = new Player(this.world, (char)0, AsciiPanel.brightWhite, 100, 20, 5, 90);
@@ -126,6 +159,10 @@ public class PlayScreen implements Screen {
         ClientListener cl=new ClientListener(client);
         new Thread(cl).start();
 
+        Sword s=new Sword(world,(char)10,Color.BLUE);
+        s.setX(14);
+        s.setY(14);
+        world.getBonuses().add(s);
         this.messages = new ArrayList<String>();
         this.oldMessages = new ArrayList<String>();
         lastCode=0;
@@ -144,7 +181,7 @@ public class PlayScreen implements Screen {
     private void createWorld() {
         world = new WorldBuilder(30, 30).makeCaves().build();
     }
-    private void loadWorld() {world = new WorldBuilder(30,30).load();}
+    private void loadWorld(String path) {world = new WorldBuilder(30,30).load(path);}
     private void displayTiles(AsciiPanel terminal, int left, int top) {
         // Show terrain
         for (int x = 0; x < screenWidth; x++) {
@@ -252,27 +289,14 @@ public class PlayScreen implements Screen {
                 break;
             
         }
-        if(player.hp()<1){
-            return new LoseScreen();
-        }
-        if (!multi&&world.getCreatures().size()==1&&player.hp()>0){
-            return new WinScreen();
-        }
-        if (multi) {
-            int cnt=0;
-            if (p0.hp()>0)
-                cnt++;
-            if (p1.hp()>0)
-                cnt++;
-            if (p2.hp()>0)
-                cnt++;
-            if (cnt==1&&player.hp()>0){
-                return new WinScreen();
-            }
-        }
         if (multi){
+            lmtcnt++;
             try{
-                client.handleWrite(pack(key.getKeyCode(),lastCode));
+                if (lmtcnt%limit==0){
+                    client.handleWrite(pack(key.getKeyCode(),lastCode)+"#");
+                }
+                else
+                    client.handleWrite(pack(key.getKeyCode(),lastCode));
             }catch (IOException e){
             }
         }
@@ -313,10 +337,24 @@ public class PlayScreen implements Screen {
     }
 
     public void handleEvent(String info){
+        if (info.contains("#")){
+            world.collapse();
+            info=info.replace("#","");
+        }
         String[] tmp = info.split("-");
-        Player p;
-        if (tmp.length!=3)
+        if (tmp.length!=3&&tmp.length!=5)
             return;
+        if (tmp.length==3)
+            handle3(tmp);
+        else{
+            String[] tmp1={tmp[0],tmp[1],String.valueOf(tmp[2].charAt(0))};
+            handle3(tmp1);
+            String[] tmp2={String.valueOf(tmp[2].charAt(1)),tmp[3],tmp[4]};
+            handle3(tmp2);
+        }
+    }
+    private void handle3(String[] tmp){
+        Player p;
         if (Integer.parseInt(tmp[0])==playerID)
             return;
         switch (Integer.parseInt(tmp[0])){
@@ -368,6 +406,7 @@ public class PlayScreen implements Screen {
                 isfireSki=true;
                 break;
             case KeyEvent.VK_D:
+                System.out.println("~~~~~"+tmp[2]);
                 p.shoot(Integer.parseInt(tmp[2]));
                 break;
         }

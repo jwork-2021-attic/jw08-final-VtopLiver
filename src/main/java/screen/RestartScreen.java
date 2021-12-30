@@ -28,7 +28,8 @@ public abstract class RestartScreen implements Screen {
 
     @Override
     public abstract void displayOutput(AsciiPanel terminal);
-
+    @Override
+    public Screen GameStatus(){return this;}
     @Override
     public Screen respondToUserInput(KeyEvent key) {
         switch (key.getKeyCode()) {

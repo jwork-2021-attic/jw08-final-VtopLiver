@@ -42,6 +42,8 @@ public class World {
     private List<Bonus> bonuses;
     private final double bonusRate=0.4;
     private Player player;
+    private int cnt;
+    private boolean[][] vis;
 
     public static final int TILE_TYPES = 4;
 
@@ -49,13 +51,16 @@ public class World {
         this.tiles = tiles;
         this.width = tiles.length;
         this.height = tiles[0].length;
+        vis=new boolean[tiles.length][tiles[0].length];
         this.creatures = new ArrayList<>();
         this.bullets =new ArrayList<>();
         this.bonuses = new ArrayList<>();
+        cnt=0;
     }
 
     public Tile tile(int x, int y) {
         if (x < 0 || x >= width || y < 0 || y >= height) {
+            //System.out.println(x+" "+y+"#");
             return Tile.BOUNDS;
         } else {
             return tiles[x][y];
@@ -99,7 +104,34 @@ public class World {
             tiles[x][y] = Tile.FLOOR;
         }
     }
+    public void collapse(){
+        if (cnt>10)
+            return;
+        for (int i=0;i<width;i++){
+            for (int j=0;j<height;j++){
+                if (tile(i+1,j)==Tile.BOUNDS||
+                    tile(i-1,j)==Tile.BOUNDS||
+                    tile(i,j+1)==Tile.BOUNDS||
+                    tile(i,j-1)==Tile.BOUNDS)
+                {
+                    if (creature(i,j)!=null){
+                        creature(i,j).modifyHP(-1000);
+                        //System.out.println(i+" "+j);
+                    }
+                    vis[i][j]=true;
+                }
 
+            }
+        }
+        for (int i=0;i< vis.length;i++){
+            for (int j=0;j<vis[i].length;j++){
+                if (vis[i][j])
+                    tiles[i][j]=Tile.BOUNDS;
+            }
+        }
+        cnt++;
+
+    }
     public void addAtEmptyLocation(Creature creature) {
         int x;
         int y;
@@ -113,6 +145,21 @@ public class World {
         creature.setY(y);
 
         this.creatures.add(creature);
+    }
+
+    public void addAtEmptyLocation(Sword c) {
+        int x;
+        int y;
+
+        do {
+            x = (int) (Math.random() * this.width);
+            y = (int) (Math.random() * this.height);
+        } while (!tile(x, y).isGround() || this.creature(x, y) != null);
+
+        c.setX(x);
+        c.setY(y);
+
+        this.bonuses.add(c);
     }
 
     public Creature creature(int x, int y) {
@@ -167,9 +214,12 @@ public class World {
             int attack=Integer.parseInt(tmp[2]);
             int xx=Integer.parseInt(tmp[3]);
             int yy=Integer.parseInt(tmp[4]);
+            int bullet=Integer.parseInt(tmp[5]);
             if(idx==0){
                 player = new Player(this, (char)0, AsciiPanel.brightWhite, 100,hp, 20, 5, 9,xx,yy);
                 this.creatures.add(player);
+                if (bullet==1)
+                    player.getSword();
             }
             else if (idx==1){
                 if (player!=null) {
@@ -213,6 +263,11 @@ public class World {
                 b.setX(xx);
                 b.setY(yy);
             }
+            else if (idx==2){
+                b=new Sword(this,(char)10,Color.BLUE);
+                b.setX(xx);
+                b.setY(yy);
+            }
             if (b!=null){
                 this.bonuses.add(b);
             }
@@ -234,10 +289,20 @@ public class World {
             int direction=Integer.parseInt(tmp[2]);
             int xx=Integer.parseInt(tmp[3]);
             int yy=Integer.parseInt(tmp[4]);
-            Bullet b=new NormalBullet(this,atk,direction);
-            b.setX(xx);
-            b.setY(yy);
-            this.bullets.add(b);
+            Bullet b=null;
+            if (idx==0){
+                b=new NormalBullet(this,atk,direction);
+                b.setX(xx);
+                b.setY(yy);
+                this.bullets.add(b);
+            }
+            else if (idx==1){
+                b=new SwordBullet(this,(char)(11+direction),Color.BLUE,atk+20,direction);
+                b.setX(xx);
+                b.setY(yy);
+                this.bullets.add(b);
+            }
+
         }
         sc.close();
     }

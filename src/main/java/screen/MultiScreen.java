@@ -11,7 +11,10 @@ public class MultiScreen implements Screen{
     public MultiScreen() {
         state = 0;
     }
-
+    @Override
+    public Screen GameStatus(){
+        return this;
+    }
     @Override
     public void displayOutput(AsciiPanel terminal) {
         switch (state) {

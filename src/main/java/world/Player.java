@@ -20,7 +20,13 @@ public class Player extends Creature{
         catch (Exception e) {}
     }
     public void shoot(int lastCode){
-        Bullet b=new NormalBullet(this.world,this.attackValue(),lastCode);
+        Bullet b;
+        if (bullet){
+            b=new SwordBullet(this.world,(char)(11+lastCode),Color.BLUE,this.attackValue()+20,lastCode);
+        }
+        else{
+            b=new NormalBullet(this.world,this.attackValue(),lastCode);
+        }
         b.setX(this.x());
         b.setY(this.y());
         this.world.getBullets().add(b);

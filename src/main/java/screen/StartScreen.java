@@ -31,7 +31,7 @@ public class StartScreen extends RestartScreen {
     private boolean positon;
     @Override
     public void displayOutput(AsciiPanel terminal){
-        terminal.write("New Game", 15, 10);
+        terminal.write("New Game", 5, 10);
         boolean cl=false;
         try{
             cl=GameData.canLoad();
@@ -39,13 +39,13 @@ public class StartScreen extends RestartScreen {
             e.printStackTrace();
         }
         if (cl){
-            terminal.write("Load Game", 15, 20);
+            terminal.write("Load Game", 5, 20);
         }
         if (this.positon && cl){
-            terminal.write("->", 12, 20);
+            terminal.write("->", 2, 20);
         }
         else{
-            terminal.write("->", 12, 10);
+            terminal.write("->", 2, 10);
         }
 
     }

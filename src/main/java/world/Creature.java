@@ -27,6 +27,17 @@ public abstract class Creature implements Runnable{
 
     protected World world;
 
+    protected boolean bullet;
+
+    public void getSword(){bullet=true;}
+
+    public int isBullet(){
+        if (bullet)
+            return 1;
+        else
+            return 0;
+    }
+
     private int x;
 
     public void setX(int x) {

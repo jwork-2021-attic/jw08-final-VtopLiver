@@ -12,7 +12,7 @@ public class ClientListener implements Runnable{
         while (true){
             try {
                 client.handleRead();
-                Thread.sleep(100);
+                Thread.sleep(50);
             }catch (IOException | InterruptedException e){
                 e.printStackTrace();
             }

@@ -34,7 +34,7 @@ public class GameData {
     private void saveCreature() throws IOException{
         FileWriter fw=new FileWriter("C:\\Users\\lenovo\\Desktop\\Java\\jw05-VtopLiver\\src\\main\\resources\\CreatureCache.txt");
         for(Creature c:this.world.getCreatures()){
-            fw.write(c.toInt()+" "+c.hp()+" "+c.attackValue()+" "+c.x()+" "+c.y()+"\n");
+            fw.write(c.toInt()+" "+c.hp()+" "+c.attackValue()+" "+c.x()+" "+c.y()+" "+c.isBullet()+"\n");
         }
         fw.flush();
         fw.close();
